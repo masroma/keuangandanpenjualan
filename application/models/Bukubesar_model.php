@@ -1,0 +1,192 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class Bukubesar_model extends CI_Model
+{
+
+    public $table = 'bukubesar';
+    public $id = '';
+    public $order = 'DESC';
+
+    function __construct()
+    {
+        parent::__construct();
+    }
+
+    // datatables
+    function json() {
+        $this->datatables->select('id,nama');
+        $this->datatables->from('bukubesar');
+        //add this line for join
+        //$this->datatables->join('table2', 'bukubesar.field = table2.field');
+        $this->datatables->add_column('action', anchor(site_url('bukubesar/read/$1'),'<i class="fa fa-eye" aria-hidden="true"></i>', array('class' => 'btn btn-danger btn-sm'))." 
+            ".anchor(site_url('bukubesar/update/$1'),'<i class="fa fa-pencil-square-o" aria-hidden="true"></i>', array('class' => 'btn btn-danger btn-sm'))." 
+                ".anchor(site_url('bukubesar/delete/$1'),'<i class="fa fa-trash-o" aria-hidden="true"></i>','class="btn btn-danger btn-sm" onclick="javasciprt: return confirm(\'Are You Sure ?\')"'), '');
+        return $this->datatables->generate();
+    }
+
+
+    //Query manual
+	function manualQuery($q)
+	{
+		return $this->db->query($q);
+	}
+    // get all
+    function get_all()
+    {
+        $this->db->order_by($this->id, $this->order);
+        return $this->db->get($this->table)->result();
+    }
+
+    // get data by id
+    function get_by_id($id)
+    {
+        $this->db->where($this->id, $id);
+        return $this->db->get($this->table)->row();
+    }
+    
+    // get total rows
+    function total_rows($q = NULL) {
+        $this->db->like('', $q);
+	$this->db->or_like('id', $q);
+	$this->db->or_like('nama', $q);
+	$this->db->from($this->table);
+        return $this->db->count_all_results();
+    }
+
+    // get data with limit and search
+    function get_limit_data($limit, $start = 0, $q = NULL) {
+        $this->db->order_by($this->id, $this->order);
+        $this->db->like('', $q);
+	$this->db->or_like('id', $q);
+	$this->db->or_like('nama', $q);
+	$this->db->limit($limit, $start);
+        return $this->db->get($this->table)->result();
+    }
+
+    // insert data
+    function insert($data)
+    {
+        $this->db->insert($this->table, $data);
+    }
+
+    // update data
+    function update($id, $data)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->update($this->table, $data);
+    }
+
+    public function CariNamaRek($id){
+		$text = "SELECT * FROM tbl_rekening WHERE no_rek='$id'";
+		$data = $this->Bukubesar_model->manualQuery($text);
+		if($data->num_rows() > 0 ){
+			foreach($data->result() as $t){
+				$hasil = $t->nama_rek;
+			}
+		}else{
+			$hasil = 0;
+		}
+		return $hasil;
+	}
+
+  	
+
+public function getBulan($bln){
+    switch ($bln){
+        case 1: 
+            return "Januari";
+            break;
+        case 2:
+            return "Februari";
+            break;
+        case 3:
+            return "Maret";
+            break;
+        case 4:
+            return "April";
+            break;
+        case 5:
+            return "Mei";
+            break;
+        case 6:
+            return "Juni";
+            break;
+        case 7:
+            return "Juli";
+            break;
+        case 8:
+            return "Agustus";
+            break;
+        case 9:
+            return "September";
+            break;
+        case 10:
+            return "Oktober";
+            break;
+        case 11:
+            return "November";
+            break;
+        case 12:
+            return "Desember";
+            break;
+    }
+} 
+
+    public function tgl_indo($tgl){
+			$jam = substr($tgl,11,10);
+			$tgl = substr($tgl,0,10);
+			$tanggal = substr($tgl,8,2);
+			$bulan = $this->Bukubesar_model->getBulan(substr($tgl,5,2));
+			$tahun = substr($tgl,0,4);
+			return $tanggal.' '.$bulan.' '.$tahun.' '.$jam;		 
+	}
+
+    public function listRek() {
+        $sql= "SELECT * FROM tbl_rekening  ORDER BY no_rek ASC";
+			$query=$this->db->query($sql);
+			return $query->result_array();
+    }
+
+    // delete data
+    function delete($id)
+    {
+        $this->db->where($this->id, $id);
+        $this->db->delete($this->table);
+    }
+
+    public function dr_sa($no,$p){
+		$q = "SELECT * FROM tbl_saldo_awal WHERE (no_rek='$no' OR no_rek LIKE '$no.%') AND periode='$p'";
+		$data = $this->Bukubesar_model->manualQuery($q);
+		if($data->num_rows() > 0 ){
+			foreach($data->result() as $t){
+				$hasil = $t->debet;
+			}
+		}else{
+			$hasil = 0;
+		}
+		return $hasil;
+	}
+	
+	public function kr_sa($no,$p){
+		$q = "SELECT * FROM tbl_saldo_awal WHERE (no_rek='$no' OR no_rek LIKE '$no.%') AND periode='$p'";
+		$data = $this->Bukubesar_model->manualQuery($q);
+		if($data->num_rows() > 0 ){
+			foreach($data->result() as $t){
+				$hasil = $t->kredit;
+			}
+		}else{
+			$hasil = 0;
+		}
+		return $hasil;
+	}
+
+}
+
+/* End of file Bukubesar_model.php */
+/* Location: ./application/models/Bukubesar_model.php */
+/* Please DO NOT modify this information : */
+/* Generated by Harviacode Codeigniter CRUD Generator 2023-02-22 17:44:31 */
+/* http://harviacode.com */
