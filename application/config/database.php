@@ -78,6 +78,7 @@ $db['default'] = array(
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',
+	'port' => 3361,
 	'database' => 'keuanganaji',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
