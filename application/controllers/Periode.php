@@ -1,0 +1,172 @@
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
+
+class Periode extends CI_Controller
+{
+    function __construct()
+    {
+        parent::__construct();
+        is_login();
+        $this->load->model('Periode_model');
+        $this->load->library('form_validation');        
+	$this->load->library('datatables');
+    }
+
+    public function index()
+    {
+        $this->template->load('template','periode/periode_list');
+    } 
+    
+    public function json() {
+        header('Content-Type: application/json');
+        echo $this->Periode_model->json();
+    }
+
+    public function read($id) 
+    {
+        $row = $this->Periode_model->get_by_id($id);
+        if ($row) {
+            $data = array(
+		'id' => $row->id,
+		'periode' => $row->periode,
+	    );
+            $this->template->load('template','periode/periode_read', $data);
+        } else {
+            $this->session->set_flashdata('message', 'Record Not Found');
+            redirect(site_url('periode'));
+        }
+    }
+
+    public function create() 
+    {
+        $data = array(
+            'button' => 'Create',
+            'action' => site_url('periode/create_action'),
+	    'id' => set_value('id'),
+	    'periode' => set_value('periode'),
+	);
+        $this->template->load('template','periode/periode_form', $data);
+    }
+    
+    public function create_action() 
+    {
+        $this->_rules();
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->create();
+        } else {
+            $data = array(
+		'periode' => $this->input->post('periode',TRUE),
+	    );
+
+            $this->Periode_model->insert($data);
+            $this->session->set_flashdata('message', 'Create Record Success 2');
+            redirect(site_url('periode'));
+        }
+    }
+    
+    public function update($id) 
+    {
+        $row = $this->Periode_model->get_by_id($id);
+
+        if ($row) {
+            $data = array(
+                'button' => 'Update',
+                'action' => site_url('periode/update_action'),
+		'id' => set_value('id', $row->id),
+		'periode' => set_value('periode', $row->periode),
+	    );
+            $this->template->load('template','periode/periode_form', $data);
+        } else {
+            $this->session->set_flashdata('message', 'Record Not Found');
+            redirect(site_url('periode'));
+        }
+    }
+    
+    public function update_action() 
+    {
+        $this->_rules();
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->update($this->input->post('id', TRUE));
+        } else {
+            $data = array(
+		'periode' => $this->input->post('periode',TRUE),
+	    );
+
+            $this->Periode_model->update($this->input->post('id', TRUE), $data);
+            $this->session->set_flashdata('message', 'Update Record Success');
+            redirect(site_url('periode'));
+        }
+    }
+    
+    public function delete($id) 
+    {
+        $row = $this->Periode_model->get_by_id($id);
+
+        if ($row) {
+            $this->Periode_model->delete($id);
+            $this->session->set_flashdata('message', 'Delete Record Success');
+            redirect(site_url('periode'));
+        } else {
+            $this->session->set_flashdata('message', 'Record Not Found');
+            redirect(site_url('periode'));
+        }
+    }
+
+    public function _rules() 
+    {
+	$this->form_validation->set_rules('periode', 'periode', 'trim|required');
+
+	$this->form_validation->set_rules('id', 'id', 'trim');
+	$this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
+    }
+
+    public function excel()
+    {
+        $this->load->helper('exportexcel');
+        $namaFile = "periode.xls";
+        $judul = "periode";
+        $tablehead = 0;
+        $tablebody = 1;
+        $nourut = 1;
+        //penulisan header
+        header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/octet-stream");
+        header("Content-Type: application/download");
+        header("Content-Disposition: attachment;filename=" . $namaFile . "");
+        header("Content-Transfer-Encoding: binary ");
+
+        xlsBOF();
+
+        $kolomhead = 0;
+        xlsWriteLabel($tablehead, $kolomhead++, "No");
+	xlsWriteLabel($tablehead, $kolomhead++, "Periode");
+
+	foreach ($this->Periode_model->get_all() as $data) {
+            $kolombody = 0;
+
+            //ubah xlsWriteLabel menjadi xlsWriteNumber untuk kolom numeric
+            xlsWriteNumber($tablebody, $kolombody++, $nourut);
+	    xlsWriteLabel($tablebody, $kolombody++, $data->periode);
+
+	    $tablebody++;
+            $nourut++;
+        }
+
+        xlsEOF();
+        exit();
+    }
+
+}
+
+/* End of file Periode.php */
+/* Location: ./application/controllers/Periode.php */
+/* Please DO NOT modify this information : */
+/* Generated by Harviacode Codeigniter CRUD Generator 2023-02-23 05:34:22 */
+/* http://harviacode.com */
