@@ -14,10 +14,15 @@
 				<td>Induk</td>
 				<td><?php echo $induk; ?></td>
 			</tr>
-	
+
 			<tr>
 				<td>Level</td>
 				<td><?php echo $level; ?></td>
+			</tr>
+	
+			<tr>
+				<td>No Rek</td>
+				<td><?php echo $no_rek; ?></td>
 			</tr>
 	
 			<tr>

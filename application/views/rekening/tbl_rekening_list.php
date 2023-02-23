@@ -5,7 +5,7 @@
                 <div class="box box-warning box-solid">
     
                     <div class="box-header">
-                        <h3 class="box-title">KELOLA DATA TBL_REKENING</h3>
+                        <h3 class="box-title">KELOLA DATA REKENING</h3>
                     </div>
         
         <div class="box-body">
@@ -17,7 +17,7 @@
                 <tr>
                     <th width="30px">No</th>
 		    <th>Induk</th>
-		    <th>Level</th>
+		    <th>No Rek</th>
 		    <th>Nama Rek</th>
 		    <th width="200px">Action</th>
                 </tr>
@@ -69,7 +69,7 @@
                         {
                             "data": "no_rek",
                             "orderable": false
-                        },{"data": "induk"},{"data": "level"},{"data": "nama_rek"},
+                        },{"data": "induk"},{"data": "no_rek"},{"data": "nama_rek"},
                         {
                             "data" : "action",
                             "orderable": false,

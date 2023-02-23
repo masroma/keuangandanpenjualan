@@ -16,7 +16,9 @@ class Rekening extends CI_Controller
 
     public function index()
     {
-        $this->template->load('template','rekening/tbl_rekening_list');
+        $data['list_rek'] =  $this->RekeningModel->listRekNama();
+        
+        $this->template->load('template','rekening/tbl_rekening_list',$data);
     } 
     
     public function json() {
@@ -33,6 +35,7 @@ class Rekening extends CI_Controller
 		'induk' => $row->induk,
 		'level' => $row->level,
 		'nama_rek' => $row->nama_rek,
+        
 	    );
             $this->template->load('template','rekening/tbl_rekening_read', $data);
         } else {
@@ -44,34 +47,62 @@ class Rekening extends CI_Controller
     public function create() 
     {
         $data = array(
-            'button' => 'Create',
-            'action' => site_url('rekening/create_action'),
+        'button' => 'Create',
+        'action' => site_url('rekening/create_action'),
 	    'no_rek' => set_value('no_rek'),
 	    'induk' => set_value('induk'),
 	    'level' => set_value('level'),
 	    'nama_rek' => set_value('nama_rek'),
+        'list_rek' =>$this->RekeningModel->listRekNama()
 	);
+    // var_dump($data);exit;
         $this->template->load('template','rekening/tbl_rekening_form', $data);
     }
     
     public function create_action() 
-    {
+    
+    {    
         $this->_rules();
-
+        $induk = $this->input->post('induk');
+        $no_rek = $this->input->post('no_rek',TRUE);
+        $out = explode(" ",$no_rek);
+		$no_rek_slug = implode("-",$out);
+          //var_dump($induk);exit;
+        
+        
         if ($this->form_validation->run() == FALSE) {
             $this->create();
         } else {
+            $induk = $this->input->post('induk');
+             // var_dump($induk);exit;
+            // echo $induk;exit;
+				
+            if($induk!=0){
+                $level = $this->RekeningModel->CariLevel($induk);
+                // var_dump($level);exit;
+                $indukinput=$this->input->post('induk');
+                $levelinput=$level+1;
+            }else{
+                $indukinput=0;
+                $levelinput=0;
+            }
             $data = array(
-		'induk' => $this->input->post('induk',TRUE),
-		'level' => $this->input->post('level',TRUE),
-		'nama_rek' => $this->input->post('nama_rek',TRUE),
-	    );
+
+               
+            'induk' => $indukinput,
+            'level' => $levelinput,
+
+            'no_rek'=> $no_rek_slug,
+            'nama_rek' => $this->input->post('nama_rek',TRUE),
+            );
+
+            // var_dump($data);exit;
 
             $this->RekeningModel->insert($data);
             $this->session->set_flashdata('message', 'Create Record Success 2');
             redirect(site_url('rekening'));
         }
-    }
+     }
     
     public function update($id) 
     {
@@ -85,6 +116,7 @@ class Rekening extends CI_Controller
 		'induk' => set_value('induk', $row->induk),
 		'level' => set_value('level', $row->level),
 		'nama_rek' => set_value('nama_rek', $row->nama_rek),
+        'list_rek' =>$this->RekeningModel->listRekNama()
 	    );
             $this->template->load('template','rekening/tbl_rekening_form', $data);
         } else {
@@ -112,12 +144,13 @@ class Rekening extends CI_Controller
         }
     }
     
-    public function delete($id) 
+    public function delete($no_rek) 
     {
-        $row = $this->RekeningModel->get_by_id($id);
+        $sql="DELETE FROM tbl_rekening WHERE no_rek='$no_rek'";
+        $query = $this->db->query($sql);
 
-        if ($row) {
-            $this->RekeningModel->delete($id);
+        if ($query) {
+            $this->RekeningModel->delete($no_rek);
             $this->session->set_flashdata('message', 'Delete Record Success');
             redirect(site_url('rekening'));
         } else {
@@ -128,18 +161,18 @@ class Rekening extends CI_Controller
 
     public function _rules() 
     {
-	$this->form_validation->set_rules('induk', 'induk', 'trim|required');
-	$this->form_validation->set_rules('level', 'level', 'trim|required');
+	// $this->form_validation->set_rules('induk', 'induk', 'trim|required');
+	// $this->form_validation->set_rules('level', 'level', 'trim|required');
 	$this->form_validation->set_rules('nama_rek', 'nama rek', 'trim|required');
 
-	$this->form_validation->set_rules('no_rek', 'no_rek', 'trim');
+	$this->form_validation->set_rules('no_rek', 'no_rek', 'trim|required');
 	$this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
 
     public function excel()
     {
         $this->load->helper('exportexcel');
-        $namaFile = "tbl_rekening.xls";
+        $namaFile = "rek_rekening.xls";
         $judul = "tbl_rekening";
         $tablehead = 0;
         $tablebody = 1;

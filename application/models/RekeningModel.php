@@ -27,6 +27,24 @@ class RekeningModel extends CI_Model
         return $this->datatables->generate();
     }
 
+    //Query manual
+	function manualQuery($q)
+	{
+		return $this->db->query($q);
+	}
+
+    public function listRekNama() {
+        $sql= "SELECT * FROM tbl_rekening ORDER BY no_rek ASC";
+			$query=$this->db->query($sql);
+			return $query->result_array();
+    }
+
+    public function listRekNamaByNorek($no_rek) {
+        $sql= "SELECT * FROM tbl_rekening WHERE no_rek = '$no_rek'";
+			$query=$this->db->query($sql);
+			return $query->row();
+    }
+
     // get all
     function get_all()
     {
@@ -81,6 +99,19 @@ class RekeningModel extends CI_Model
         $this->db->where($this->id, $id);
         $this->db->delete($this->table);
     }
+    
+    public function CariLevel($id){
+		$text = "SELECT * FROM tbl_rekening WHERE no_rek='$id'";
+		$data = $this->RekeningModel->manualQuery($text);
+		if($data->num_rows() > 0 ){
+			foreach($data->result() as $t){
+				$hasil = $t->level;
+			}
+		}else{
+			$hasil = 0;
+		}
+		return $hasil;
+	}
 
 }
 
