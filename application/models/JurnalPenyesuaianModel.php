@@ -27,6 +27,27 @@ class JurnalPenyesuaianModel extends CI_Model
         return $this->datatables->generate();
     }
 
+    function get_no_jurnal(){
+        $q = $this->db->query("SELECT MAX(RIGHT(no_jurnal,4)) AS kd_max FROM tbl_jurnal_penyesuaian WHERE DATE(tgl_jurnal)=CURDATE()");
+        $kd = "";
+        if($q->num_rows()>0){
+            foreach($q->result() as $k){
+                $tmp = ((int)$k->kd_max)+1;
+                $kd = sprintf("%04s", $tmp);
+            }
+        }else{
+            $kd = "0001";
+        }
+        date_default_timezone_set('Asia/Jakarta');
+        return date('dmy').$kd;
+    }
+
+    public function listRekNama() {
+        $sql= "SELECT * FROM tbl_rekening ORDER BY no_rek ASC";
+			$query=$this->db->query($sql);
+			return $query->result_array();
+    }
+
     // get all
     function get_all()
     {

@@ -56,6 +56,8 @@ class Jurnalpenyesuaian extends CI_Controller
 	    'kredit' => set_value('kredit'),
 	    'username' => set_value('username'),
 	    'tgl_insert' => set_value('tgl_insert'),
+        'no_jurnal'=> $this->JurnalPenyesuaianModel->get_no_jurnal(),
+        'list_rek' =>$this->JurnalPenyesuaianModel->listRekNama()
 	);
         $this->template->load('template','jurnalpenyesuaian/tbl_jurnal_penyesuaian_form', $data);
     }
@@ -68,13 +70,16 @@ class Jurnalpenyesuaian extends CI_Controller
             $this->create();
         } else {
             $data = array(
+        'no_jurnal' => $this->input->post('no_jurnal',TRUE),
+        'no_rek' => $this->input->post('no_rek',TRUE),
+        // 'nama_rek' => $this->input->post('nama_rek',TRUE),
 		'tgl_jurnal' => $this->input->post('tgl_jurnal',TRUE),
 		'debet' => $this->input->post('debet',TRUE),
 		'kredit' => $this->input->post('kredit',TRUE),
 		'username' => $this->input->post('username',TRUE),
 		'tgl_insert' => $this->input->post('tgl_insert',TRUE),
 	    );
-
+        // var_dump($data);exit;
             $this->JurnalPenyesuaianModel->insert($data);
             $this->session->set_flashdata('message', 'Create Record Success 2');
             redirect(site_url('jurnalpenyesuaian'));

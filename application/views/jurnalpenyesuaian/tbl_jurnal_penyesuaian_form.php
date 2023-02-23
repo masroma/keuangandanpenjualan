@@ -1,16 +1,44 @@
+
+
 <div class="content-wrapper">
 	<section class="content">
 		<div class="box box-warning box-solid">
 			<div class="box-header with-border">
-				<h3 class="box-title"><?php echo strtoupper($button) ?> DATA TBL_JURNAL_PENYESUAIAN</h3>
+				<h3 class="box-title"><?php echo strtoupper($button) ?> DATA JURNAL PENYESUAIAN</h3>
 			</div>
 			<form action="<?php echo $action; ?>" method="post">
 			
 				<table class='table table-bordered'>
+				<tr>
+						<td width='200'>Nomor Jurnal <?php echo form_error('no_jurnal') ?></td>
+						<td><input type="text" class="form-control" name="no_jurnal" id="no_jurnal" placeholder="Nomor Jurnal" value="<?php echo $no_jurnal;?>" readonly/></td>
+					</tr>
+
+					<tr>
+						<td width='200'>Nomor Rekening <?php echo form_error('no_jurnal') ?></td>
+						<td><select name="no_rek" id="no_rek" class="form-control select2">
+						
+
+						<option value="">-PILIH-</option>
+    <?php
+	foreach($list_rek as $t){
+	?>
+    <option value="<?php echo $t['no_rek'];?>"><?php echo $t['no_rek'];?> | <?php echo $t['nama_rek'];?></option>
+    <?php } ?>
+    </select>
+						
+
+						
+						</select></td>
+					</tr>
+
+					<!-- <tr>
+						<td width='200'>Nama Rekening <?php //echo form_error('nama_rek') ?></td><td><input type="text" class="form-control" name="nama_rek" id="nama_rek" placeholder="Debet" value="<?php //echo $nama_rek; ?>" readonly/></td>
+					</tr> -->
 	
 					<tr>
 						<td width='200'>Tgl Jurnal <?php echo form_error('tgl_jurnal') ?></td>
-						<td><input type="date" class="form-control" name="tgl_jurnal" id="tgl_jurnal" placeholder="Tgl Jurnal" value="<?php echo $tgl_jurnal; ?>" /></td>
+						<td><input type="date" class="form-control" name="tgl_jurnal" id="tgl_jurnal" placeholder="Tgl Jurnal" value="<?php echo date("d-m-Y"); ?>" /></td>
 					</tr>
 	
 					<tr>
@@ -43,3 +71,4 @@
 		</div>
 	</section>
 </div>
+

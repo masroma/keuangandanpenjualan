@@ -345,5 +345,32 @@
                 })
             })
         </script>
+
+
+<script>
+    $(function(){
+        // $('#no_rek').on('change', function(){
+        //     var noRek = $(this).children("option:selected").val();
+        //     alert(noRek)
+        // });
+
+
+		//  $('#nama_rek').on('change', function(){
+		// 	var namaRek= $("#no_rek option:selected").val();
+		// 	alert(namaRek)
+		// });
+
+         $("#no_rek").on("change",function(){
+            //Getting Value
+            var selValue = $("#no_rek :selected").text();
+            //Setting Value
+            $("#nama_rek").val(selValue);
+        });
+    });
+
+	
+
+</script>
+
     </body>
 </html>

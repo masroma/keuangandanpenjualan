@@ -14,6 +14,11 @@
 				<td>Tgl Jurnal</td>
 				<td><?php echo $tgl_jurnal; ?></td>
 			</tr>
+
+			<tr>
+				<td>No Rek</td>
+				<td><?php echo $no_rek; ?></td>
+			</tr>
 	
 			<tr>
 				<td>Debet</td>
