@@ -60,6 +60,9 @@ class Jurnalumum extends CI_Controller
 	    'kredit' => set_value('kredit'),
 	    'username' => set_value('username'),
 	    'tgl_insert' => set_value('tgl_insert'),
+        'no_jurnal'=> $this->JurnalumumModel->get_no_jurnal(),
+        'list_rek' =>$this->JurnalumumModel->listRekNama()
+
 	);
         $this->template->load('template','jurnalumum/tbl_jurnal_umum_form', $data);
     }
@@ -72,8 +75,10 @@ class Jurnalumum extends CI_Controller
             $this->create();
         } else {
             $data = array(
+        'no_jurnal'=>$this->input->post('no_jurnal',TRUE),
 		'tgl_jurnal' => $this->input->post('tgl_jurnal',TRUE),
 		'ket' => $this->input->post('ket',TRUE),
+        'no_rek'=>$this->input->post('no_rek',TRUE),
 		'no_bukti' => $this->input->post('no_bukti',TRUE),
 		'debet' => $this->input->post('debet',TRUE),
 		'kredit' => $this->input->post('kredit',TRUE),
@@ -104,6 +109,8 @@ class Jurnalumum extends CI_Controller
 		'kredit' => set_value('kredit', $row->kredit),
 		'username' => set_value('username', $row->username),
 		'tgl_insert' => set_value('tgl_insert', $row->tgl_insert),
+        'no_jurnal'=> $this->JurnalumumModel->get_no_jurnal(),
+        'list_rek' =>$this->JurnalumumModel->listRekNama()
 	    );
             $this->template->load('template','jurnalumum/tbl_jurnal_umum_form', $data);
         } else {
@@ -120,9 +127,11 @@ class Jurnalumum extends CI_Controller
             $this->update($this->input->post('no_jurnal', TRUE));
         } else {
             $data = array(
+                'no_jurnal'=>$this->input->post('no_jurnal',TRUE),
 		'tgl_jurnal' => $this->input->post('tgl_jurnal',TRUE),
 		'ket' => $this->input->post('ket',TRUE),
 		'no_bukti' => $this->input->post('no_bukti',TRUE),
+        'no_rek' => $this->input->post('no_rek',TRUE),
 		'debet' => $this->input->post('debet',TRUE),
 		'kredit' => $this->input->post('kredit',TRUE),
 		'username' => $this->input->post('username',TRUE),

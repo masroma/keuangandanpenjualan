@@ -24,6 +24,13 @@
 				<td>No Bukti</td>
 				<td><?php echo $no_bukti; ?></td>
 			</tr>
+
+			<tr>
+				<td>No Rekening</td>
+				<td><?php echo $no_rek; ?></td>
+			</tr>
+
+			
 	
 			<tr>
 				<td>Debet</td>

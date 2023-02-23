@@ -2,12 +2,36 @@
 	<section class="content">
 		<div class="box box-warning box-solid">
 			<div class="box-header with-border">
-				<h3 class="box-title"><?php echo strtoupper($button) ?> DATA TBL_JURNAL_UMUM</h3>
+				<h3 class="box-title"><?php echo strtoupper($button) ?> DATA JURNAL UMUM</h3>
 			</div>
 			<form action="<?php echo $action; ?>" method="post">
 			
 				<table class='table table-bordered'>
-	
+					
+					<tr>
+						<td width='200'>Nomor Jurnal <?php echo form_error('no_jurnal') ?></td>
+						<td><input type="text" class="form-control" name="no_jurnal" id="no_jurnal" placeholder="Nomor Jurnal" value="<?php echo $no_jurnal;?>" readonly/></td>
+					</tr>
+
+					<tr>
+						<td width='200'>Nomor Rekening <?php echo form_error('no_jurnal') ?></td>
+						<td><select name="no_rek" id="induk" class="form-control select2">
+						<option value="0">-PILIH-</option>
+
+						
+							<?php
+							foreach($list_rek as $t){
+							?>
+							<option value="<?php echo $t['no_rek'];?> "><?php echo $t['nama_rek']?></option>
+							<?php } ?>
+
+							
+						
+
+						
+						</select></td>
+					</tr>
+
 					<tr>
 						<td width='200'>Tgl Jurnal <?php echo form_error('tgl_jurnal') ?></td>
 						<td><input type="date" class="form-control" name="tgl_jurnal" id="tgl_jurnal" placeholder="Tgl Jurnal" value="<?php echo $tgl_jurnal; ?>" /></td>
@@ -34,7 +58,7 @@
 					</tr>
 	
 					<tr>
-						<td width='200'>Tgl Insert <?php echo form_error('tgl_insert') ?></td><td><input type="text" class="form-control" name="tgl_insert" id="tgl_insert" placeholder="Tgl Insert" value="<?php echo $tgl_insert; ?>" /></td>
+						<td width='200'>Tgl Insert <?php echo form_error('tgl_insert') ?></td><td><input type="date" class="form-control" name="tgl_insert" id="tgl_insert" placeholder="Tgl Insert" value="<?php echo $tgl_insert; ?>" /></td>
 					</tr>
 	
 					<tr>
